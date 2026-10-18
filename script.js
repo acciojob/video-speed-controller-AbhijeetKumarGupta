@@ -1,6 +1,21 @@
 const video = document.querySelector('video');
 video.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
 
+const speed = document.querySelector('.speed');
+const speedBar = document.querySelector('.speed-bar');
+
+const progress = document.createElement('div');
+progress.className = 'progress__filled';
+progress.style.height = '100%';
+progress.style.width = '0%';
+progress.style.backgroundColor = '#ffc600';
+progress.style.position = 'absolute';
+progress.style.left = '0';
+progress.style.top = '0';
+
+speed.style.position = 'relative';
+speed.appendChild(progress);
+
 const inputs = document.querySelectorAll('.controls input');
 
 function handleUpdate() {
@@ -13,7 +28,7 @@ function handleUpdate() {
 
   if (this.name === 'playbackSpeed') {
     video.playbackRate = Number(this.value);
-    document.querySelector('.speed-bar').textContent = `${this.value}×`;
+    speedBar.textContent = `${this.value}×`;
   }
 }
 
@@ -21,7 +36,6 @@ inputs.forEach(input => input.addEventListener('change', handleUpdate));
 inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
 
 const toggle = document.querySelector('.player__button.toggle');
-const progress = document.querySelector('.progress__filled');
 const rewind = document.querySelector('.rewind');
 const skip = document.querySelector('.skip');
 
@@ -40,9 +54,7 @@ video.addEventListener('timeupdate', () => {
     ? (video.currentTime / video.duration) * 100
     : 0;
 
-  if (progress) {
-    progress.style.width = `${percent}%`;
-  }
+  progress.style.width = `${percent}%`;
 });
 
 if (rewind) {
@@ -53,6 +65,6 @@ if (rewind) {
 
 if (skip) {
   skip.addEventListener('click', () => {
-    video.currentTime = Math.min(video.duration, video.currentTime + 25);
+    video.currentTime = Math.min(video.duration || 0, video.currentTime + 25);
   });
 }
