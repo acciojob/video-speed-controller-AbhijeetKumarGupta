@@ -18,7 +18,7 @@ const inputs = document.querySelectorAll('.controls input');
 
 const video = document.querySelector('video');
 const toggle = document.querySelector('.player__button.toggle');
-const progress = document.querySelector('.progress__filled');
+const progress = document.querySelector('.speed-bar');
 const rewind = document.querySelector('[data-skip="-10"]');
 const skip = document.querySelector('[data-skip="25"]');
 
@@ -37,7 +37,9 @@ function updateButton() {
 }
 
 function updateProgress() {
-  progress.style.flexBasis = `${(video.currentTime / video.duration) * 100}%`;
+  const percentage = (video.currentTime / video.duration) * 100;
+  progress.style.width = `${percentage}%`;
+  progress.textContent = `${video.playbackRate}×`;
 }
 
 function skipVideo() {
