@@ -1,70 +1,34 @@
 const video = document.querySelector('video');
 video.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
 
-const speed = document.querySelector('.speed');
-const speedBar = document.querySelector('.speed-bar');
+const wrapper = document.querySelector('.wrapper');
 
-const progress = document.createElement('div');
-progress.className = 'progress__filled';
-progress.style.height = '100%';
-progress.style.width = '0%';
-progress.style.backgroundColor = '#ffc600';
-progress.style.position = 'absolute';
-progress.style.left = '0';
-progress.style.top = '0';
+let progress = wrapper.querySelector('.progress');
 
-speed.style.position = 'relative';
-speed.appendChild(progress);
+if (!progress) {
+  progress = document.createElement('div');
+  progress.className = 'progress';
+  progress.style.width = '100%';
+  progress.style.height = '10px';
+  progress.style.backgroundColor = '#ccc';
+  progress.style.position = 'relative';
 
-const inputs = document.querySelectorAll('.controls input');
+  const progressFilled = document.createElement('div');
+  progressFilled.className = 'progress__filled';
+  progressFilled.style.width = '0%';
+  progressFilled.style.height = '100%';
+  progressFilled.style.backgroundColor = '#ffc600';
 
-function handleUpdate() {
-  const suffix = this.dataset.sizing || '';
-  document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
-
-  if (this.name === 'volume') {
-    video.volume = Number(this.value);
-  }
-
-  if (this.name === 'playbackSpeed') {
-    video.playbackRate = Number(this.value);
-    speedBar.textContent = `${this.value}×`;
-  }
+  progress.appendChild(progressFilled);
+  video.insertAdjacentElement('afterend', progress);
 }
 
-inputs.forEach(input => input.addEventListener('change', handleUpdate));
-inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
-
-const toggle = document.querySelector('.player__button.toggle');
-const rewind = document.querySelector('.rewind');
-const skip = document.querySelector('.skip');
-
-toggle.addEventListener('click', () => {
-  if (video.paused) {
-    video.play();
-    toggle.textContent = '❚ ❚';
-  } else {
-    video.pause();
-    toggle.textContent = '►';
-  }
-});
+const progressFilled = progress.querySelector('.progress__filled');
 
 video.addEventListener('timeupdate', () => {
   const percent = video.duration
     ? (video.currentTime / video.duration) * 100
     : 0;
 
-  progress.style.width = `${percent}%`;
+  progressFilled.style.width = `${percent}%`;
 });
-
-if (rewind) {
-  rewind.addEventListener('click', () => {
-    video.currentTime = Math.max(0, video.currentTime - 10);
-  });
-}
-
-if (skip) {
-  skip.addEventListener('click', () => {
-    video.currentTime = Math.min(video.duration || 0, video.currentTime + 25);
-  });
-}
