@@ -1,8 +1,5 @@
 const inputs = document.querySelectorAll('.controls input');
 
-const video = document.querySelector('video');
-video.src = 'https://www.w3schools.com/html/mov_bbb.mp4';
-
 const toggle = document.querySelector('.player__button.toggle');
 
 function handleUpdate() {
