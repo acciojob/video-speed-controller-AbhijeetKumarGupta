@@ -8,11 +8,11 @@ function handleUpdate() {
   document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
 
   if (this.name === 'volume') {
-    video.volume = this.value;
+    video.volume = Number(this.value);
   }
 
   if (this.name === 'playbackSpeed') {
-    video.playbackRate = this.value;
+    video.playbackRate = Number(this.value);
     document.querySelector('.speed-bar').textContent = `${this.value}×`;
   }
 }
@@ -36,9 +36,12 @@ toggle.addEventListener('click', () => {
 });
 
 video.addEventListener('timeupdate', () => {
-  const percent = (video.currentTime / video.duration) * 100;
+  const percent = video.duration
+    ? (video.currentTime / video.duration) * 100
+    : 0;
+
   if (progress) {
-    progress.style.flexBasis = `${percent}%`;
+    progress.style.width = `${percent}%`;
   }
 });
 
